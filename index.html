@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Grocery Order</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin:0;
+      font-family: Arial, sans-serif;
+      background: #f2f7f2;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2e7d32, #66bb6a);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    input, select {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    input {
+      width: 70px;
+    }
+
+    select {
+      flex: 1;
+    }
+
+    .section {
+      margin-top: 20px;
+    }
+
+    .section h3 {
+      margin-bottom: 10px;
+      color: #2e7d32;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .field input {
+      width: 100%;
+    }
+
+    .btn {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 15px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .btn:active {
+      background: #1b5e20;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>🛒 Grocery Order</header>
+
+<div class="container" id="items"></div>
+
+<div class="container section">
+  <h3>Your Details</h3>
+  <div class="field">
+    <input id="name" placeholder="Full Name">
+  </div>
+  <div class="field">
+    <input id="mobile" placeholder="Mobile Number">
+  </div>
+</div>
+
+<button class="btn" onclick="sendOrder()">Send Order</button>
+
+<script>
+
+const groceryItems = [
+  "Rice",
+  "Wheat Flour",
+  "Sugar",
+  "Oil",
+  "Milk",
+  "Biscuits",
+  "Salt",
+  "Tea Powder"
+];
+
+const container = document.getElementById("items");
+
+// render UI
+groceryItems.forEach((item, index) => {
+  container.innerHTML += `
+    <div class="card">
+      <div class="item-row">
+        <div class="item-name">${item}</div>
+      </div>
+      <div class="controls">
+        <input type="number" id="qty${index}" placeholder="Qty">
+        <select id="unit${index}">
+          <option value="kg">kg</option>
+          <option value="gms">gms</option>
+          <option value="bottles">bottles</option>
+        </select>
+      </div>
+    </div>
+  `;
+});
+
+function sendOrder() {
+
+  let name = document.getElementById("name").value.trim();
+  let mobile = document.getElementById("mobile").value.trim();
+
+  if (!name || name.length < 2) {
+    alert("Enter valid name");
+    return;
+  }
+
+  if (!mobile || mobile.length < 8) {
+    alert("Enter valid mobile");
+    return;
+  }
+
+  let order = "";
+
+  groceryItems.forEach((item, i) => {
+    let qty = document.getElementById("qty" + i).value;
+    let unit = document.getElementById("unit" + i).value;
+
+    if (qty) {
+      order += `${item}: ${qty} ${unit}\n`;
+    }
+  });
+
+  if (!order) {
+    alert("Select at least one item");
+    return;
+  }
+
+  let message = `🛒 Grocery Order\n\nName: ${name}\nMobile: ${mobile}\n\n${order}`;
+
+  let phone = "919346707247"; // CHANGE THIS
+
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
+}
+
+</script>
+
+</body>
+</html>
